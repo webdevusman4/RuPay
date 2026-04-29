@@ -28,16 +28,16 @@ public class LoginView extends BaseView {
         // Logo
         VBox logoBox = new VBox(8);
         logoBox.setAlignment(Pos.CENTER);
-        
+
         Label logoIcon = new Label("◈");
         logoIcon.getStyleClass().add("logo-icon");
-        
+
         Label logoText = new Label("RuPay");
         logoText.getStyleClass().add("logo-text");
-        
+
         Label tagline = new Label("Crypto Made Simple");
         tagline.getStyleClass().add("tagline");
-        
+
         logoBox.getChildren().addAll(logoIcon, logoText, tagline);
 
         // Form
@@ -81,9 +81,9 @@ public class LoginView extends BaseView {
         demoBox.getStyleClass().add("demo-box");
         Label demoTitle = new Label("Demo Credentials");
         demoTitle.getStyleClass().add("demo-title");
-        Label demoUser = new Label("User: ahmed@example.com");
+        Label demoUser = new Label("User: ahmed@example.com | Pass: password123");
         demoUser.getStyleClass().add("demo-text");
-        Label demoAdmin = new Label("Admin: admin@rupay.com");
+        Label demoAdmin = new Label("Admin: admin@rupay.com | Pass: admin123");
         demoAdmin.getStyleClass().add("demo-text");
         demoBox.getChildren().addAll(demoTitle, demoUser, demoAdmin);
 
@@ -94,8 +94,8 @@ public class LoginView extends BaseView {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
 
-        if (email.isEmpty()) {
-            showError("Please enter your email");
+        if (email.isEmpty() || password.isEmpty()) {
+            showError("Please enter both email and password");
             return;
         }
 

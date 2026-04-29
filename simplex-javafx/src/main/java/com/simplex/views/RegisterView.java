@@ -12,6 +12,7 @@ public class RegisterView extends BaseView {
     private VBox view;
     private TextField nameField;
     private TextField emailField;
+    private PasswordField passwordField; // Added Password Field
     private PasswordField pinField;
     private PasswordField confirmPinField;
     private Label errorLabel;
@@ -30,10 +31,10 @@ public class RegisterView extends BaseView {
         // Logo
         VBox logoBox = new VBox(8);
         logoBox.setAlignment(Pos.CENTER);
-        
+
         Label logoIcon = new Label("◈");
         logoIcon.getStyleClass().add("logo-icon");
-        
+
         Label logoText = new Label("RuPay");
         logoText.getStyleClass().add("logo-text");
 
@@ -54,6 +55,11 @@ public class RegisterView extends BaseView {
         emailField = new TextField();
         emailField.setPromptText("Email");
         emailField.getStyleClass().add("auth-input");
+
+        // Initialized Password Field
+        passwordField = new PasswordField();
+        passwordField.setPromptText("Password");
+        passwordField.getStyleClass().add("auth-input");
 
         pinField = new PasswordField();
         pinField.setPromptText("4-digit PIN");
@@ -80,8 +86,9 @@ public class RegisterView extends BaseView {
         loginHyperlink.setOnAction(e -> navController.navigateTo("login"));
         loginLink.getChildren().addAll(hasAccount, loginHyperlink);
 
-        form.getChildren().addAll(title, nameField, emailField, pinField, 
-                                  confirmPinField, errorLabel, registerBtn, loginLink);
+        // Added passwordField to the form rendering
+        form.getChildren().addAll(title, nameField, emailField, passwordField, pinField,
+                confirmPinField, errorLabel, registerBtn, loginLink);
 
         view.getChildren().addAll(logoBox, form);
     }
@@ -89,6 +96,7 @@ public class RegisterView extends BaseView {
     private void handleRegister() {
         String name = nameField.getText().trim();
         String email = emailField.getText().trim();
+        String password = passwordField.getText(); // Extract Password
         String pin = pinField.getText();
         String confirmPin = confirmPinField.getText();
 
@@ -96,8 +104,18 @@ public class RegisterView extends BaseView {
             showError("Please enter your name");
             return;
         }
-        if (email.isEmpty() || !email.contains("@")) {
-            showError("Please enter a valid email");
+        // Create a boolean to check if the email ends with famous domains
+        boolean isValidDomain = email.endsWith("@gmail.com") || 
+                                email.endsWith("@yahoo.com") || 
+                                email.endsWith("@outlook.com") ||
+                                email.endsWith("@example.com");
+
+        if (email.isEmpty() || !isValidDomain) {
+            showError("Please use a valid Gmail, Yahoo, or Outlook email");
+            return;
+        }
+        if (password.isEmpty() || password.length() < 6) { // Check Password Length
+            showError("Password must be at least 6 characters");
             return;
         }
         if (pin.length() != 4 || !pin.matches("\\d+")) {
@@ -109,7 +127,8 @@ public class RegisterView extends BaseView {
             return;
         }
 
-        User user = dataService.register(name, email, pin);
+        // Updated to send password to DataService
+        User user = dataService.register(name, email, password, pin);
         if (user != null) {
             navController.navigateTo("dashboard");
         } else {
@@ -126,6 +145,7 @@ public class RegisterView extends BaseView {
     public void refresh(Object data) {
         nameField.clear();
         emailField.clear();
+        passwordField.clear(); // Clear password field on refresh
         pinField.clear();
         confirmPinField.clear();
         errorLabel.setVisible(false);

@@ -6,8 +6,9 @@ import java.util.*;
 
 public class DataService {
     private static DataService instance;
-    
+
     private Map<String, User> users;
+    private Map<String, String> userPasswords; // ADDED: Secure map for passwords
     private Map<String, Crypto> cryptos;
     private List<Transaction> transactions;
     private List<WithdrawRequest> withdrawRequests;
@@ -25,16 +26,20 @@ public class DataService {
     }
 
     private void initializeData() {
-        // Initialize users
+        // Initialize users & passwords
         users = new HashMap<>();
+        userPasswords = new HashMap<>(); // Initialize the password map
+
         User user1 = new User("1", "Ahmed Khan", "ahmed@example.com", "1234", 150000, false);
         user1.setCryptoBalance("BTC", 0.05);
         user1.setCryptoBalance("ETH", 1.5);
         user1.setCryptoBalance("USDT", 500);
         users.put("ahmed@example.com", user1);
+        userPasswords.put("ahmed@example.com", "password123"); // Save demo password
 
         User admin = new User("admin", "Admin", "admin@rupay.com", "0000", 0, true);
         users.put("admin@rupay.com", admin);
+        userPasswords.put("admin@rupay.com", "admin123"); // Save admin password
 
         // Initialize cryptos
         cryptos = new LinkedHashMap<>();
@@ -55,26 +60,36 @@ public class DataService {
 
         // Initialize withdraw requests
         withdrawRequests = new ArrayList<>();
-        withdrawRequests.add(new WithdrawRequest("w1", "1", "Ahmed Khan", "ahmed@example.com", 
+        withdrawRequests.add(new WithdrawRequest("w1", "1", "Ahmed Khan", "ahmed@example.com",
                 50000, "HBL-1234567890"));
     }
 
-    // User methods
+    // --- UPDATED User methods ---
+
     public User login(String email, String password) {
-        User user = users.get(email.toLowerCase());
-        if (user != null) {
+        String cleanEmail = email.toLowerCase();
+        User user = users.get(cleanEmail);
+        String savedPassword = userPasswords.get(cleanEmail);
+
+        // UPDATED: Now verifies the password matches exactly
+        if (user != null && savedPassword != null && savedPassword.equals(password)) {
             currentUser = user;
             return user;
         }
         return null;
     }
 
-    public User register(String name, String email, String pin) {
-        if (users.containsKey(email.toLowerCase())) {
-            return null;
+    // UPDATED: Added password parameter to register method
+    public User register(String name, String email, String password, String pin) {
+        String cleanEmail = email.toLowerCase();
+        if (users.containsKey(cleanEmail)) {
+            return null; // Email already exists
         }
+
         User newUser = new User(UUID.randomUUID().toString(), name, email, pin, 0, false);
-        users.put(email.toLowerCase(), newUser);
+        users.put(cleanEmail, newUser);
+        userPasswords.put(cleanEmail, password); // Securely store the new user's password
+
         currentUser = newUser;
         return newUser;
     }
@@ -99,7 +114,7 @@ public class DataService {
         return users.values();
     }
 
-    // Crypto methods
+    // --- Crypto methods ---
     public Collection<Crypto> getAllCryptos() {
         return cryptos.values();
     }
@@ -108,13 +123,14 @@ public class DataService {
         return cryptos.get(symbol);
     }
 
-    // Transaction methods
+    // --- Transaction methods ---
     public List<Transaction> getUserTransactions() {
         return transactions;
     }
 
     public List<Transaction> getFilteredTransactions(Transaction.Type type) {
-        if (type == null) return transactions;
+        if (type == null)
+            return transactions;
         List<Transaction> filtered = new ArrayList<>();
         for (Transaction t : transactions) {
             if (t.getType() == type) {
@@ -128,13 +144,15 @@ public class DataService {
         transactions.add(0, transaction);
     }
 
-    // Trading methods
+    // --- Trading methods ---
     public boolean buyCrypto(String symbol, double amount) {
         Crypto crypto = cryptos.get(symbol);
-        if (crypto == null || currentUser == null) return false;
+        if (crypto == null || currentUser == null)
+            return false;
 
         double cost = amount * crypto.getPriceInPKR();
-        if (currentUser.getPkrBalance() < cost) return false;
+        if (currentUser.getPkrBalance() < cost)
+            return false;
 
         currentUser.setPkrBalance(currentUser.getPkrBalance() - cost);
         currentUser.setCryptoBalance(symbol, currentUser.getCryptoBalance(symbol) + amount);
@@ -145,17 +163,18 @@ public class DataService {
                 symbol,
                 amount,
                 cost,
-                Transaction.Status.COMPLETED
-        ));
+                Transaction.Status.COMPLETED));
 
         return true;
     }
 
     public boolean sellCrypto(String symbol, double amount) {
         Crypto crypto = cryptos.get(symbol);
-        if (crypto == null || currentUser == null) return false;
+        if (crypto == null || currentUser == null)
+            return false;
 
-        if (currentUser.getCryptoBalance(symbol) < amount) return false;
+        if (currentUser.getCryptoBalance(symbol) < amount)
+            return false;
 
         double value = amount * crypto.getPriceInPKR();
         currentUser.setCryptoBalance(symbol, currentUser.getCryptoBalance(symbol) - amount);
@@ -167,17 +186,19 @@ public class DataService {
                 symbol,
                 amount,
                 value,
-                Transaction.Status.COMPLETED
-        ));
+                Transaction.Status.COMPLETED));
 
         return true;
     }
 
     public boolean transferCrypto(String symbol, double amount, String recipientEmail) {
         User recipient = users.get(recipientEmail.toLowerCase());
-        if (recipient == null || currentUser == null) return false;
-        if (recipient.getEmail().equalsIgnoreCase(currentUser.getEmail())) return false;
-        if (currentUser.getCryptoBalance(symbol) < amount) return false;
+        if (recipient == null || currentUser == null)
+            return false;
+        if (recipient.getEmail().equalsIgnoreCase(currentUser.getEmail()))
+            return false;
+        if (currentUser.getCryptoBalance(symbol) < amount)
+            return false;
 
         Crypto crypto = cryptos.get(symbol);
         double value = amount * crypto.getPriceInPKR();
@@ -191,16 +212,16 @@ public class DataService {
                 symbol,
                 amount,
                 value,
-                Transaction.Status.COMPLETED
-        ));
+                Transaction.Status.COMPLETED));
 
         return true;
     }
 
-    // Wallet methods
+    // --- Wallet methods ---
     public boolean depositPKR(double amount) {
-        if (currentUser == null || amount <= 0) return false;
-        
+        if (currentUser == null || amount <= 0)
+            return false;
+
         currentUser.setPkrBalance(currentUser.getPkrBalance() + amount);
         addTransaction(new Transaction(
                 UUID.randomUUID().toString(),
@@ -208,13 +229,13 @@ public class DataService {
                 null,
                 0,
                 amount,
-                Transaction.Status.COMPLETED
-        ));
+                Transaction.Status.COMPLETED));
         return true;
     }
 
     public boolean requestWithdraw(double amount, String bankAccount) {
-        if (currentUser == null || amount <= 0 || currentUser.getPkrBalance() < amount) return false;
+        if (currentUser == null || amount <= 0 || currentUser.getPkrBalance() < amount)
+            return false;
 
         withdrawRequests.add(new WithdrawRequest(
                 UUID.randomUUID().toString(),
@@ -222,8 +243,7 @@ public class DataService {
                 currentUser.getName(),
                 currentUser.getEmail(),
                 amount,
-                bankAccount
-        ));
+                bankAccount));
 
         addTransaction(new Transaction(
                 UUID.randomUUID().toString(),
@@ -231,13 +251,12 @@ public class DataService {
                 null,
                 0,
                 amount,
-                Transaction.Status.PENDING
-        ));
+                Transaction.Status.PENDING));
 
         return true;
     }
 
-    // Admin methods
+    // --- Admin methods ---
     public List<WithdrawRequest> getPendingWithdrawals() {
         List<WithdrawRequest> pending = new ArrayList<>();
         for (WithdrawRequest req : withdrawRequests) {
