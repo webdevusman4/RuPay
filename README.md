@@ -13,7 +13,7 @@
 
 *A fully functional cryptocurrency exchange simulator — buy, sell, transfer, and manage crypto with a sleek dark UI.*
 
-![Hero Screenshot](simplex-javafx/assets/dashboard.png)
+![Hero Screenshot](rupay-javafx/assets/dashboard.png)
 
 </div>
 
@@ -71,9 +71,9 @@
     <td align="center"><b>Buy Crypto</b></td>
   </tr>
   <tr>
-    <td><img src="simplex-javafx/assets/login.png" alt="Login Screen"/></td>
-    <td><img src="simplex-javafx/assets/dashboard.png" alt="Dashboard"/></td>
-    <td><img src="simplex-javafx/assets/buy.png" alt="Buy Crypto"/></td>
+    <td><img src="rupay-javafx/assets/login.png" alt="Login Screen"/></td>
+    <td><img src="rupay-javafx/assets/dashboard.png" alt="Dashboard"/></td>
+    <td><img src="rupay-javafx/assets/buy.png" alt="Buy Crypto"/></td>
   </tr>
   <tr>
     <td align="center"><b>Wallet</b></td>
@@ -81,9 +81,9 @@
     <td align="center"><b>Admin Panel</b></td>
   </tr>
   <tr>
-    <td><img src="simplex-javafx/assets/wallet.png" alt="Wallet"/></td>
-    <td><img src="simplex-javafx/assets/history.png" alt="History"/></td>
-    <td><img src="simplex-javafx/assets/admin_panel.png" alt="Admin Panel"/></td>
+    <td><img src="rupay-javafx/assets/wallet.png" alt="Wallet"/></td>
+    <td><img src="rupay-javafx/assets/history.png" alt="History"/></td>
+    <td><img src="rupay-javafx/assets/admin_panel.png" alt="Admin Panel"/></td>
   </tr>
 </table>
 
@@ -101,14 +101,14 @@
 ### Option 1 — Maven (Recommended)
 
 ```bash
-cd simplex-javafx
+cd rupay-javafx
 mvn clean javafx:run
 ```
 
 ### Option 2 — IDE
 
 1. Open the project as a **Maven project** in IntelliJ IDEA, Eclipse, or VS Code
-2. Run the `SimpleXApp.java` main class
+2. Run the `RuPayApp.java` main class
 
 ---
 
@@ -124,11 +124,11 @@ mvn clean javafx:run
 ## 🗂️ Project Structure
 
 ```
-simplex-javafx/
+rupay-javafx/
 ├── pom.xml                              # Maven configuration
 └── src/main/
-    ├── java/com/simplex/
-    │   ├── SimpleXApp.java              # Application entry point
+    ├── java/com/rupay/
+    │   ├── RuPayApp.java              # Application entry point
     │   ├── controllers/
     │   │   └── NavigationController.java
     │   ├── models/
@@ -185,7 +185,7 @@ Every part of the app has a specific role. Here is how they connect:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    SimpleXApp.java                      │
+│                    RuPayApp.java                      │
 │              (Entry point — starts everything)          │
 └───────────────────────┬─────────────────────────────────┘
                         │ creates
@@ -232,10 +232,10 @@ Every part of the app has a specific role. Here is how they connect:
 mvn javafx:run   (or)   run-presentation.bat
         │
         ▼
-SimpleXApp.main()  →  JavaFX launch()
+RuPayApp.main()  →  JavaFX launch()
         │
         ▼
-SimpleXApp.start(Stage)
+RuPayApp.start(Stage)
   ├── new NavigationController()
   │       ├── Creates root StackPane container
   │       ├── Instantiates all 9 View objects (stored in a Map)
@@ -255,7 +255,7 @@ SimpleXApp.start(Stage)
 
 ## 🔓 3. How Login Works
 
-![Login Screen](simplex-javafx/assets/login.png)
+![Login Screen](rupay-javafx/assets/login.png)
 
 The **Login Screen** is the app's entry point. The user provides their email and password to authenticate.
 
@@ -301,7 +301,7 @@ return null;             // ❌ fail
 
 ## 📝 4. How Registration Works
 
-![Register Screen](simplex-javafx/assets/register.png)
+![Register Screen](rupay-javafx/assets/register.png)
 
 The **Register Screen** lets new users create an account with name, email, password, and a 4-digit PIN.
 
@@ -403,7 +403,7 @@ DataService.loadDatabase()
 
 ## 🧭 6. How Navigation Works
 
-![Dashboard Screen](simplex-javafx/assets/dashboard.png)
+![Dashboard Screen](rupay-javafx/assets/dashboard.png)
 
 The `NavigationController` manages all screen switching using a pre-built `Map` of all views:
 
@@ -450,7 +450,7 @@ Window (400 × 800)
 
 ## 🔐 7. How PIN Verification Works
 
-![PIN Popup](simplex-javafx/assets/pin_popup.png)
+![PIN Popup](rupay-javafx/assets/pin_popup.png)
 
 A PIN is required before every financial transaction (Buy, Sell, Transfer, Withdraw).
 
@@ -481,7 +481,7 @@ PinPopupView.verifyPin()
 
 ## 🟢 8. How Buy Crypto Works
 
-![Buy Crypto Screen](simplex-javafx/assets/buy.png)
+![Buy Crypto Screen](rupay-javafx/assets/buy.png)
 
 The **Buy Crypto** screen lets users purchase any supported cryptocurrency using their PKR balance. The total cost is calculated live based on the current mock market price.
 
@@ -513,7 +513,7 @@ DataService.buyCrypto(symbol, amount)
 
 ## 🔴 9. How Sell Crypto Works
 
-![Sell Crypto Screen](simplex-javafx/assets/sell.png)
+![Sell Crypto Screen](rupay-javafx/assets/sell.png)
 
 ```
 User selects crypto + enters amount  →  "Sell Now"
@@ -540,7 +540,7 @@ DataService.sellCrypto(symbol, amount)
 
 ## ↗️ 10. How Transfer Works
 
-![Transfer Crypto Screen](simplex-javafx/assets/transfer.png)
+![Transfer Crypto Screen](rupay-javafx/assets/transfer.png)
 
 ```
 User selects crypto + recipient email + amount  →  "Transfer"
@@ -574,9 +574,9 @@ DataService.transferCrypto(symbol, amount, recipientEmail)
 
 ## 👛 11. How Wallet (Deposit & Withdraw) Works
 
-![Wallet Screen](simplex-javafx/assets/wallet.png)
+![Wallet Screen](rupay-javafx/assets/wallet.png)
 
-![Wallet Forms](simplex-javafx/assets/wallet_forms.png)
+![Wallet Forms](rupay-javafx/assets/wallet_forms.png)
 
 ### Deposit PKR — Instant, No PIN Required
 
@@ -613,7 +613,7 @@ DataService.requestWithdraw(amount, bankAccount)
 
 ## 📜 12. How Transaction History Works
 
-![Transaction History Screen](simplex-javafx/assets/history.png)
+![Transaction History Screen](rupay-javafx/assets/history.png)
 
 ```
 HistoryView.refresh()
@@ -644,7 +644,7 @@ DataService.getFilteredTransactions(type)
 
 ## 🛡️ 13. How Admin Panel Works
 
-![Admin Panel](simplex-javafx/assets/admin_panel.png)
+![Admin Panel](rupay-javafx/assets/admin_panel.png)
 
 The Admin Panel is only accessible via `admin@rupay.com`.
 
@@ -743,7 +743,7 @@ View reads updated data from DataService  →  UI reflects changes
 
 ---
 
-![Dashboard Activity](simplex-javafx/assets/dashboard_activity.png)
+![Dashboard Activity](rupay-javafx/assets/dashboard_activity.png)
 
 *The Dashboard's Recent Activity section reflects all transactions in real time after every operation.*
 

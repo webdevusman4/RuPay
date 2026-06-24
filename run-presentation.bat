@@ -9,7 +9,7 @@ echo.
 echo Please wait while the application compiles and starts...
 echo.
 
-cd simplex-javafx
+cd rupay-javafx
 call .\mvnw.cmd clean javafx:run
 
 echo.
