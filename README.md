@@ -89,26 +89,110 @@
 
 ---
 
-## 📦 Requirements
+## 📦 Prerequisites
 
-- **Java** 17 or higher
-- **Maven** 3.6+
+Make sure the following are installed before running the project:
+
+| Tool | Required? | Version | Download |
+|---|---|---|---|
+| ☕ Java JDK | ✅ **Yes** | 17 or higher | [adoptium.net](https://adoptium.net) |
+| 📦 Apache Maven | ❌ Not needed | — | Included via Maven Wrapper (`mvnw`) |
+| 🐙 Git | ❌ Optional | any | [git-scm.com](https://git-scm.com) |
+
+> ✅ **Only Java is required.** Maven is bundled in the project — you don't need to install it separately.
+
+---
+
+## 🛠️ Step 0 — Install Java (if not installed)
+
+### Windows
+1. Go to **[adoptium.net](https://adoptium.net)**
+2. Download **Temurin JDK 17** (`.msi` installer)
+3. Run the installer — check ✅ **"Add to PATH"** during setup
+4. Open a new terminal and verify:
+   ```bash
+   java -version
+   ```
+   You should see something like: `openjdk version "17.x.x"`
+
+### macOS
+```bash
+# Using Homebrew
+brew install --cask temurin@17
+```
+
+### Linux (Ubuntu/Debian)
+```bash
+sudo apt update
+sudo apt install openjdk-17-jdk
+```
 
 ---
 
 ## 🚀 Getting Started
 
-### Option 1 — Maven (Recommended)
+### Step 1 — Get the Project
 
+**Option A — Using Git:**
 ```bash
-cd rupay-javafx
-mvn clean javafx:run
+git clone https://github.com/webdevusman4/RuPay.git
+cd RuPay
 ```
 
-### Option 2 — IDE
+**Option B — Without Git (Download ZIP):**
+1. Go to the GitHub repo page
+2. Click **Code → Download ZIP**
+3. Extract the ZIP anywhere on your computer
+4. Open a terminal inside the extracted folder
 
-1. Open the project as a **Maven project** in IntelliJ IDEA, Eclipse, or VS Code
-2. Run the `RuPayApp.java` main class
+---
+
+### Step 2 — Run the App
+
+Choose **one** of the options below:
+
+#### ▶️ Option A — Maven Wrapper (Recommended, No Maven Install Needed)
+
+**Windows:**
+```bat
+cd rupay-javafx
+.\mvnw.cmd clean javafx:run
+```
+
+**macOS / Linux:**
+```bash
+cd rupay-javafx
+./mvnw clean javafx:run
+```
+
+> ⏳ First run downloads all dependencies automatically (~1–2 min). Subsequent runs are instant.
+
+---
+
+#### ▶️ Option B — Windows Batch Script (Easiest — One Double-Click)
+
+1. Open the project root folder in File Explorer
+2. Double-click **`run-presentation.bat`**
+
+That's it — the app will compile and launch automatically.
+
+---
+
+#### ▶️ Option C — IDE (IntelliJ IDEA / Eclipse / VS Code)
+
+1. Open your IDE and select **"Open Project"** or **"Import Project"**
+2. Select the **`rupay-javafx/`** subfolder
+3. Choose **Maven** as the project type — the IDE will auto-download all dependencies
+4. Navigate to `src/main/java/com/rupay/RuPayApp.java`
+5. Click the ▶️ **Run** button
+
+---
+
+### ⚠️ First Run Notes
+
+- The app creates **`rupay_db.dat`** automatically on first launch — no manual database setup needed
+- Demo accounts are pre-loaded so you can log in immediately (see [Demo Credentials](#-demo-credentials))
+- If you see a JavaFX error, make sure your **Java version is 17 or higher** (`java -version`)
 
 ---
 
@@ -185,7 +269,7 @@ Every part of the app has a specific role. Here is how they connect:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    RuPayApp.java                      │
+│                    RuPayApp.java                        │
 │              (Entry point — starts everything)          │
 └───────────────────────┬─────────────────────────────────┘
                         │ creates
